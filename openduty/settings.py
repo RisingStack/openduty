@@ -114,21 +114,36 @@ STATICFILES_FINDERS = (
 
 AUTH_PROFILE_MODULE = 'openduty.UserProfile'
 
-BASE_URL = ""
+BASE_URL = os.environ['BASE_URL']
 
-XMPP_SETTINGS = {
-}
+if os.environ.has_key('XMPP_SETTINGS_USER'):
+    XMPP_SETTINGS = {
+        'user': os.environ['XMPP_SETTINGS_USER'],
+        'password': os.environ['XMPP_SETTINGS_PASSWORD'],
+        'server': os.environ['XMPP_SETTINGS_SERVER'],
+        'port': int(os.environ['XMPP_SETTINGS_PORT'])
+    }
 
 EMAIL_SETTINGS = {
+   'user': os.environ['EMAIL_SETTINGS_USER'],
+   'password': os.environ['EMAIL_SETTINGS_PASSWORD']
 }
 
 TWILIO_SETTINGS = {
+    'SID': os.environ['TWILIO_SETTINGS_SID'],
+    'token': os.environ['TWILIO_SETTINGS_TOKEN'],
+    'phone_number': os.environ['TWILIO_SETTINGS_PHONE_NUMBER'],
+    'sms_number': os.environ['TWILIO_SETTINGS_SMS_NUMBER'],
+    'twiml_url': os.environ['TWILIO_SETTINGS_TWIM_URL']
 }
 
 SLACK_SETTINGS = {
+    'apikey': os.environ['SLACK_SETTINGS_APIKEY']
 }
 
 PROWL_SETTINGS = {
+  'priority': 0
+  'application': 'openduty'
 }
 
 CACHES = {
@@ -141,12 +156,20 @@ CACHES = {
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ['DATABASES_DEFAULT_NAME'],
+        'USER': os.environ['DATABASES_DEFAULT_USER'],
+        'PASSWORD': os.environ['DATABASES_DEFAULT_PASSWORD'],
+        'HOST': os.environ['DATABASES_DEFAULT_HOST'],
+        'PORT': int(os.environ['DATABASES_DEFAULT_PORT'])
+    }
 }
 TWILIO_ACCOUNT_SID = TWILIO_SETTINGS.get("SID", "disabled")
 TWILIO_AUTH_TOKEN = TWILIO_SETTINGS.get("token", "disabled")
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ''
+SECRET_KEY = os.environ['SECRET_KEY']
 
 import sys
 if 'test' in sys.argv:
